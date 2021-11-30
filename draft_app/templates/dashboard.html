@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main_styles.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <title>Dashboard</title>
+</head>
+<body style="background-image: url('/static/assets/football_field_background.png'); -webkit-background-size: cover; min-height: 100vh;">
+    <div class="mask p-5" style="background-color: rgba(0, 0, 0, 0.4); -webkit-background-size: cover; min-height: 100vh;">
+        <div class="text-center text-light title">
+            MyDraft Partner
+        </div>
+        <div class="container mask d-flex flex-column my-5 p-5 border border-light rounded text-light" style="background-color: rgba(0, 0, 0, 0.4); max-width: 850px;">
+            <div class="d-flex flex-row justify-content-between navbar-nav rounded text-light">
+                <h2>{{ user.user_name }}</h2>
+                <div class="d-flex flex-row justify-content-between" style="width: 290px;">
+                    <a href="#" class="text-light">Customize</a> |
+                    <a href="/users/account" class="text-light">Account</a>
+                    <a href="/users/logout" type="button" class="btn btn-outline-primary"  style="max-height: 40px;">Logout</a>
+                </div>
+            </div>
+            <div class="border border-primary mt-4 mb-3" style="width: 99%; margin: auto;"></div>
+            <div class="d-flex flex-column my-5">
+                <h5 class="fw-bold text-decoration-underline fs-5">Get Player Recommendations:</h5><br>
+                <form action="/players/results" method="post" class="form" style="max-width: 60%;">
+                    <label for="team_name" id="team_name_label" class="form-label mt-3">Team Name:</label>
+                    <input type="text" name="team_name" id="team_name_input" placeholder="(optional)" class="form-control">
+                    <label for="num_of_teams" id="num_of_teams_label" class="form-label mt-3">How many teams are in your league?</label>
+                    <select onclick="displaySpots()" name="num_of_teams" id="num_of_teams_select" class="form-select" style="max-width: 75px;">
+                        <option value="8">8</option>
+                        <option value="10">10</option>
+                        <option value="12">12</option>
+                        <option value="14">14</option>
+                        <option value="16">16</option>
+                    </select>
+                    <label for="draft_position" id="draft_position_label" class="form-label mt-3">Which position are you drafting from?</label>
+                    <select name="draft_position" id="draft_position_select" class="form-select" style="max-width: 75px;">
+                        <option>-</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                    </select>
+                    <label for="draft_rounds" id="draft_rounds_label" class="form-label mt-3">How many total roster spots per team (starters + bench) ?</label>
+                    <select name="draft_rounds" id="draft_rounds_select" class="form-select" style="max-width: 75px;">
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                    </select>
+                    <button type="submit" name="submit_btn" id="submit_btn" class="btn btn-primary my-4 fw-bold">GO</button>
+                
+            </div>
+            <div class="d-flex flex-column text-center justify-content-center">
+                <a class="link-light text-decoration-none fs-5"  onclick="displayAdvanced()" onmouseover="mousePointer(this)">
+                    <p>Advanced Options</p>
+                    <img class="mx-auto d-block" src="/static/assets/down-arrow-icon-vector.png" alt="down arrow icon" style="max-height: 30px; max-width: 80px;">
+                </a>
+                <div id="advanced_container" class="d-flex flex-column border border-primary rounded mx-5 justify-content-start text-start" style="min-height: 7px;">
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+    <script src="/static/scripts/dynamic.js"></script>
+    <script src="/static/scripts/draft_position.js"></script>
+</body>
+</html>

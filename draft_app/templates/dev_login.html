@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <title>Admin Login</title>
+</head>
+<body style="background-image: url('static/assets/football_field_background.png'); -webkit-background-size: cover; min-height: 100vh;">
+    <div class="mask p-5" style="background-color: rgba(0, 0, 0, 0.4); -webkit-background-size: cover; min-height: 100vh;">
+        <div class="container d-flex flex-row text-light p-5 mask border rounded border-light justify-content-between" style="background-color: rgba(0, 0, 0, 0.4); max-width: 600px;">
+            <div class="d-flex flex-column" style="max-width: 200px;">
+                <h3>LogIn</h3>
+                {% with login_error = get_flashed_messages(category_filter=['login']) %}
+                {% for message in login_error %}
+                <span class="text-danger">{{ message }}</span>
+                {% endfor %}
+                {% endwith %}
+                <form action="/admin/login" method="post" class="form">
+                    <!--  -->
+                    <label for="email_login" class="mt-2">Email:</label>
+                    <input type="email" name="email_login" id="email_login" class="form-control">
+                    <!--  -->
+                    <label for="password_login" class="mt-2">Password:</label>
+                    <input type="password" name="password_login" id="password_login" class="form-control">
+                    <!--  -->
+                    <button type="submit" class="btn btn-outline-light my-3">Confirm</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

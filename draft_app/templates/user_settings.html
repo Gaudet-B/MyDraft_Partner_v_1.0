@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main_styles.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <title>Settings</title>
+</head>
+<body style="background-image: url('/static/assets/football_field_background.png'); background-size: cover; -moz-background-size: cover; -webkit-background-size: cover; min-height: 100vh;">
+    <div class="mask p-5" style="background-color: rgba(0, 0, 0, 0.4); -webkit-background-size: cover; min-height: 100vh;">
+        <div class="text-center text-light title">
+            MyDraft Partner
+        </div>
+        <div class="container mask d-flex flex-column my-5 p-5 border border-light rounded text-light" style="background-color: rgba(0, 0, 0, 0.4); max-width: 850px;">
+            <div class="d-flex flex-row justify-content-between">
+                <h2>Welcome {{ user.user_name }}</h2>
+                <div class="d-flex flex-row justify-content-between mb-5" style="width: 160px;">
+                    <a href="/users/account" class="text-light">Account</a> |
+                    <a href="/users/logout" type="button" class="text-light" >Logout</a>
+                </div>
+            </div>
+            <div class="d-flex flex-column my-5">
+                <h5>Edit your Account Settings</h5><br>
+                <div class="d-flex flex-column p-1 border rounded border-dark bg-light" style="max-width: 80%;">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+@font-face {
+    font-family: "Aquire";
+    src: url(../fonts/Aquire-BW0ox.otf);
+}
+
+.title {
+    font-family: Aquire, sans-serif;
+    font-size: 40pt;
+}
