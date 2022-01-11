@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main_styles.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
-    <title>Dashboard</title>
+    <title>Get Draft Recommendations</title>
 </head>
 <body style="background-image: url('/static/assets/football_field_background.png'); -webkit-background-size: cover; min-height: 100vh;">
     <div class="mask p-5" style="background-color: rgba(0, 0, 0, 0.4); -webkit-background-size: cover; min-height: 100vh;">
@@ -14,19 +14,13 @@
             MyDraft Partner
         </div>
         <div class="container mask d-flex flex-column my-5 p-5 border border-light rounded text-light" style="background-color: rgba(0, 0, 0, 0.4); max-width: 850px;">
-            <div class="d-flex flex-row justify-content-between navbar-nav rounded text-light">
-                <h2>{{ user.user_name }}</h2>
-                <div class="d-flex flex-row justify-content-between" style="max-width: 350px; min-width: 250px; vertical-align: middle;">
-                    <a href="#" class="link link-light pt-2">Customize</a> 
-                    <!-- <p class="pt-2 mb-0"> | </p> -->
-                    <a href="/users/account" class="link link-light pt-2">Account</a>
-                    <a href="/users/logout" type="button" class="btn btn-sm btn-outline-primary text-light"  style="max-height: 40px; padding: 8px 5px 5px 6px;">log out</a>
-                </div>
-            </div>
+            {% block header %}
+            
+            {% endblock %}
             <div class="border border-primary rounded bg-primary mt-4 mb-3" style="width: 99%; margin: auto;"></div>
             <div class="d-flex flex-column my-5">
                 <h5 class="fw-bold text-decoration-underline fs-5">Get Player Recommendations:</h5><br>
-                <form action="/players/results" method="post" class="form" style="max-width: 60%;">
+                <form id="form" action="/players/results" method="post" class="form" style="max-width: 60%;">
                     <label for="team_name" id="team_name_label" class="form-label mt-3">Team Name:</label>
                     <input type="text" name="team_name" id="team_name_input" placeholder="(optional)" class="form-control">
                     <label for="num_of_teams" id="num_of_teams_label" class="form-label mt-3">How many teams are in your league?</label>
@@ -65,11 +59,26 @@
                 
             </div>
             <div class="d-flex flex-column text-center justify-content-center">
+
+                <!-- {#{% if user %}#}
+                <a class="link-light text-decoration-none fs-5" href="/users/recommendations/advanced" onclick="displayAdvanced()" onmouseover="mousePointer(this)">
+                    <p>Advanced Options</p>
+                    <img id="arrow" class="mx-auto d-block" src="/static/assets/down-arrow-icon-vector.png" alt="down arrow icon" style="max-height: 30px; max-width: 80px;">
+                </a>
+                {#{% else %}#}
+                <a class="link-light text-decoration-none fs-5" href="/guest/recommendations/advanced" onclick="displayAdvanced()" onmouseover="mousePointer(this)">
+                    <p>Advanced Options</p>
+                    <img id="arrow" class="mx-auto d-block" src="/static/assets/down-arrow-icon-vector.png" alt="down arrow icon" style="max-height: 30px; max-width: 80px;">
+                </a>
+                {#{% endif %}#} -->
+
                 <a class="link-light text-decoration-none fs-5"  onclick="displayAdvanced()" onmouseover="mousePointer(this)">
                     <p>Advanced Options</p>
-                    <img class="mx-auto d-block" src="/static/assets/down-arrow-icon-vector.png" alt="down arrow icon" style="max-height: 30px; max-width: 80px;">
+                    <img id="arrow" class="mx-auto d-block" src="/static/assets/down-arrow-icon-vector.png" alt="down arrow icon" style="max-height: 30px; max-width: 80px;">
                 </a>
                 <div id="advanced_container" class="d-flex flex-column border border-primary rounded mx-5 justify-content-start text-start" style="min-height: 7px;">
+                    {% block advanced %}
+                    {% endblock %}
                 </div>
             </form>
             </div>

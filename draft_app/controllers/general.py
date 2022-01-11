@@ -2,6 +2,58 @@ from draft_app.models.player import DATABASE
 from draft_app.config.mysqlconnection import connectToMySQL
 
 
+# data structure for autocomplete search
+class trieNode:
+    def __init__(self):
+        self.next = {}
+        self.leaf = False
+    # 
+    def add_item(self, item):
+        i = 0
+        while i < len(item):
+            k = item[i]
+            if not k in self.next:
+                node = trieNode()
+                self.next[k] = node
+            self = self.next[k]
+            if i == len(item) - 1: 
+                self.leaf = True
+            else:
+                self.leaf = False
+            i += 1
+    # 
+    def search(self, item):
+        if self.leaf and len(item) == 0:
+            return True
+        first = item[:1]  
+        str = item[1:]  
+        if first in self.next:
+            return self.next[first].search(str)
+        else:
+            return False
+    # 
+    def traversal(self, item):
+        if self.leaf:
+            print (item)
+        for i in self.next:
+            s = item + i
+            self.next[i].traversal(s)
+    # 
+    def autocomplete(self, item):
+        i = 0
+        s = ''
+        while i < len(item):
+            k = item[i]
+            s += k
+            if k in self.next:
+                self = self.next[k]
+            else:
+                return 'NOT FOUND'
+            i += 1
+        self.traversal(s)
+        return 'END'
+
+
 # function that returns a list the overall picks to be drafted
 def draft_order(teams, spot, rounds):
 
@@ -66,9 +118,9 @@ def find_max_ecr(player_list):
     return max_ecr
 
 
-# function that, given an unsorted list and an epty list, removes all elements from the first list and appends them to the second list in order 
+# function that, given an unsorted list and an empty list, removes all elements from the first list and appends them to the second list in order 
 def sort_by_ecr(unsorted_players, sorted_players):
-    # call max_ecr function to get the lowest ECR rank from the list
+    # call find_max_ecr function to get the lowest ECR rank from the list
     max_ecr = find_max_ecr(unsorted_players)
     # add that player to the sorted list
     sorted_players.append(max_ecr)

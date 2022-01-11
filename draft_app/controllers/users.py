@@ -39,17 +39,26 @@ def dashboard():
 @app.route("/users/recommendations")
 def recommendations():
     if "user_id" not in session:
-        return redirect("/users/guest")
+        return redirect("/guest/recommendations")
     data = {
         "id": session['user_id']
     }
     user = User.get_user_by_id(data)
-    return render_template("recommendations.html", user = user)
+    return render_template("loggedin.html", user = user)
 
 # guest
-@app.route("/users/guest")
+@app.route("/guest/recommendations")
 def guest():
     return render_template("guest.html")
+
+# advanced
+@app.route("/users/recommendations/advanced")
+def users_advanced():
+    return render_template("advanced.html")
+
+@app.route("/guest/recommendations/advanced")
+def guest_advanced():
+    return render_template("advanced.html")
 
 # settings
 @app.route("/users/account")

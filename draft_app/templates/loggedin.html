@@ -1,0 +1,13 @@
+{% extends 'recommendations.html' %}
+
+{% block header %}
+<div class="d-flex flex-row justify-content-between navbar-nav rounded text-light">
+    <h2>{{ user.user_name }}</h2>
+    <div class="d-flex flex-row justify-content-between" style="max-width: 350px; min-width: 250px; vertical-align: middle;">
+        <a href="#" class="link link-light pt-2">Customize</a> 
+        <!-- <p class="pt-2 mb-0"> | </p> -->
+        <a href="/users/account" class="link link-light pt-2">Account</a>
+        <a href="/users/logout" type="button" class="btn btn-sm btn-outline-primary text-light"  style="max-height: 40px; padding: 8px 5px 5px 6px;">log out</a>
+    </div>
+</div>
+{% endblock %}
