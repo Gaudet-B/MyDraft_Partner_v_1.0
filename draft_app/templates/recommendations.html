@@ -1,38 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main_styles.css') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <title>Get Draft Recommendations</title>
 </head>
-<body style="background-image: url('/static/assets/football_field_background.png'); -webkit-background-size: cover; min-height: 100vh;">
-    <div class="mask p-5" style="background-color: rgba(0, 0, 0, 0.4); -webkit-background-size: cover; min-height: 100vh;">
+
+<body
+    style="background-image: url('/static/assets/football_field_background.png'); -webkit-background-size: cover; min-height: 100vh;">
+    <div class="mask p-5"
+        style="background-color: rgba(0, 0, 0, 0.4); -webkit-background-size: cover; min-height: 100vh;">
         <div class="text-center text-light title">
             MyDraft Partner
         </div>
-        <div class="container mask d-flex flex-column my-5 p-5 border border-light rounded text-light" style="background-color: rgba(0, 0, 0, 0.4); max-width: 850px;">
+        <div class="container mask d-flex flex-column my-5 p-5 border border-light rounded text-light"
+            style="background-color: rgba(0, 0, 0, 0.4); max-width: 850px;">
             {% block header %}
-            
+
             {% endblock %}
             <div class="border border-primary rounded bg-primary mt-4 mb-3" style="width: 99%; margin: auto;"></div>
             <div class="d-flex flex-column my-5">
                 <h5 class="fw-bold text-decoration-underline fs-5">Get Player Recommendations:</h5><br>
                 <form id="form" action="/players/results" method="post" class="form" style="max-width: 60%;">
                     <label for="team_name" id="team_name_label" class="form-label mt-3">Team Name:</label>
-                    <input type="text" name="team_name" id="team_name_input" placeholder="(optional)" class="form-control">
-                    <label for="num_of_teams" id="num_of_teams_label" class="form-label mt-3">How many teams are in your league?</label>
-                    <select onclick="displaySpots()" name="num_of_teams" id="num_of_teams_select" class="form-select" style="max-width: 75px;">
+                    <input type="text" name="team_name" id="team_name_input" placeholder="(optional)"
+                        class="form-control">
+                    <label for="num_of_teams" id="num_of_teams_label" class="form-label mt-3">How many teams are in your
+                        league?</label>
+                    <select onclick="displaySpots()" name="num_of_teams" id="num_of_teams_select" class="form-select"
+                        style="max-width: 75px;">
                         <option value="8">8</option>
                         <option value="10">10</option>
                         <option value="12">12</option>
                         <option value="14">14</option>
                         <option value="16">16</option>
                     </select>
-                    <label for="draft_position" id="draft_position_label" class="form-label mt-3">Which position are you drafting from?</label>
-                    <select name="draft_position" id="draft_position_select" class="form-select" style="max-width: 75px;">
+                    <label for="draft_position" id="draft_position_label" class="form-label mt-3">Which position are you
+                        drafting from?</label>
+                    <select name="draft_position" id="draft_position_select" class="form-select"
+                        style="max-width: 75px;">
                         <option>-</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -43,7 +54,8 @@
                         <option value="7">7</option>
                         <option value="8">8</option>
                     </select>
-                    <label for="draft_rounds" id="draft_rounds_label" class="form-label mt-3">How many total roster spots per team (starters + bench) ?</label>
+                    <label for="draft_rounds" id="draft_rounds_label" class="form-label mt-3">How many total roster
+                        spots per team (starters + bench) ?</label>
                     <select name="draft_rounds" id="draft_rounds_select" class="form-select" style="max-width: 75px;">
                         <option value="12">12</option>
                         <option value="13">13</option>
@@ -55,8 +67,9 @@
                         <option value="19">19</option>
                         <option value="20">20</option>
                     </select>
-                    <button type="submit" name="submit_btn" id="submit_btn" class="btn btn-primary my-4 fw-bold">GO</button>
-                
+                    <button type="submit" name="submit_btn" id="submit_btn"
+                        class="btn btn-primary my-4 fw-bold">GO</button>
+
             </div>
             <div class="d-flex flex-column text-center justify-content-center">
 
@@ -72,34 +85,91 @@
                 </a>
                 {#{% endif %}#} -->
 
-                <a href="/guest/recommendations/advanced" class="link-light text-decoration-none fs-5"  onclick="displayAdvanced()" onmouseover="mousePointer(this)">
+                <!-- <a href="/guest/recommendations/advanced" class="link-light text-decoration-none fs-5"  onclick="displayAdvanced()" onmouseover="mousePointer(this)"> -->
+                <a class="link-light text-decoration-none fs-5" onclick="displayAdvanced()"
+                    onmouseover="mousePointer(this)">
                     <p>Advanced Options</p>
-                    <img id="arrow" class="mx-auto d-block" src="/static/assets/down-arrow-icon-vector.png" alt="down arrow icon" style="max-height: 30px; max-width: 80px;">
+                    <img id="arrow" class="mx-auto d-block" src="/static/assets/down-arrow-icon-vector.png"
+                        alt="down arrow icon" style="max-height: 30px; max-width: 80px;">
                 </a>
-                <div id="advanced_container" class="d-flex flex-column border border-primary rounded mx-5 justify-content-start text-start" style="min-height: 7px;">
+                <div id="advanced_container"
+                    class="d-flex flex-column border border-primary rounded mx-5 justify-content-start text-start"
+                    style="min-height: 7px;">
                     {% block advanced %}
                     {% endblock %}
                 </div>
-            </form>
+                </form>
             </div>
         </div>
     </div>
     <script src="/static/scripts/dynamic.js"></script>
     <script src="/static/scripts/draft_position.js"></script>
-    <!-- <script src="/static/scripts/autocomplete.js">
-        var namesArr = {{ player_names|safe }}
-
-        const autofill = (element, namesArr = namesArr) => {
     
-            console.log("BEGIN")
-            
+    <script type="text/javascript">
+
+        var names = {{ player_names| safe }}
+
+        const addActive = (elem, current) => {
+
+            removeActive(elem)
+
+            if (current >= elem.childNodes.length) current = 0
+            if (current < 0) current = elem.childNodes.length - 1
+
+            elem.childNodes[current].classList.add("autocomplete-active")
+        }
+
+        const removeActive = elem => {
+            for (let i = 0; i < elem.childNodes.length; i++) {
+                elem.childNodes[i].classList.remove("autocomplete-active")
+            }
+        }
+
+        const handleClick = e => {
+            document.getElementById("target_player_input").value = e.innerHTML
+            closeList()
+        }
+
+        const select = e => {
+
+            let playerList = document.getElementById("autocomplete-list")
+            console.log(playerList)
+            let current = -1
+
+            if (e.keyCode === 40) {
+                e.preventDefault()
+                current++
+                addActive(playerList, current)
+            } else if (e.keyCode === 38) {
+                e.preventDefault()
+                current--
+                addActive(playerList, current)
+            } else if (e.keyCode === 13) {
+                e.preventDefault()
+                if (current > -1) {
+                    document.getElementById("target_player_input").value = playerList.childNodes[current].innerHTML
+                }
+            }
+        }
+
+        const closeList = () => {
+            let delList = document.getElementById("autocomplete-list")
+            // console.log(delList)
+            delList.innerHTML = ""
+        }
+
+        const autofill = (element, namesArr = names) => {
+
+            // console.log(namesArr)
             let prefix = element.value
+            // console.log(prefix)
 
             class TrieNode {
                 constructor(value) {
                     this.value = value
                     this.children = {}
                     this.isEndOfWord = false
+                    this.word = ""
                 }
             }
 
@@ -110,7 +180,9 @@
                 }
 
                 addName(string) {
+                    // console.log(string)
                     let currentNode = this.root
+                    // console.log(currentNode)
                     for (let char of string) {
                         if (currentNode.children[char] === undefined) {
                             currentNode.children[char] = new TrieNode(char)
@@ -118,6 +190,7 @@
                         currentNode = currentNode.children[char]
                     }
                     currentNode.isEndOfWord = true
+                    currentNode.word = string
                 }
 
                 search(string) {
@@ -143,43 +216,93 @@
 
                 namesWithPrefix(prefix) {
 
-                    const getAllNames = (root, prefix, namesArr) => {
-                        let name = prefix
+                    // console.log(prefix)
+
+                    let currentNode = this.root
+                    // console.log(currentNode)
+                    let arrayOfNames = []
+
+                    const getAllNames = (root, namesArr) => {
+                        // let name = prefix
+                        // console.log(name)
+                        // console.log(root)
                         if (root.isEndOfWord) {
-                            namesArr.push(prefix)
+                            namesArr.push(root.word)
+                            // name = ""
+                            // console.log(namesArr)
                         } else {
-                            for (const node in root.children) {
-                                name += node.value
-                                getAllNames(node, name, namesArr)
+                            for (const char in root.children) {
+                                // console.log(char)
+                                // name += char
+                                // console.log(root.children[char])
+                                getAllNames(root.children[char], namesArr)
                             }
                         }
                     }
 
-                    let currentNode = this.root
-                    let namesArr = []
-
                     for (const char of prefix) {
-                        if (!(char in currentNode.children)) return namesArr
-                        currentNode = currentNode[char]
+                        // console.log(char)
+                        // console.log(Object.keys(currentNode.children))
+                        if (Object.keys(currentNode.children).includes(char)) {
+                            currentNode = currentNode.children[char]
+                            // console.log(currentNode)
+                        } else return arrayOfNames
                     }
 
-                    getAllNames(currentNode, prefix, namesArr)
+                    getAllNames(currentNode, arrayOfNames)
 
-                    return namesArr
+                    // console.log(arrayOfNames)
+                    return arrayOfNames
 
                 }
 
             }
 
-            let newTrie = new Trie
-
-            for (const name in namesArr) {
-                newTrie.addName(name)
+            if (prefix.length < 1) {
+                console.log(prefix.length)
+                closeList()
+                return
             }
 
+            let newTrie = new Trie()
+
+            for (let i = 0; i < namesArr.length; i++) {
+                // console.log(namesArr[i])
+                newTrie.addName(namesArr[i])
+            }
+
+            if (!document.getElementById("autocomplete-list")) {
+                let listContainer = document.createElement("div")
+                let targetDiv = document.getElementById("target_player_div")
+
+                listContainer.setAttribute("id", "autocomplete-list")
+                listContainer.setAttribute("class", "d-flex flex-column autocomplete-items")
+                // listContainer.addEventListener("keydown", select(this))
+
+                targetDiv.appendChild(listContainer)
+
+            } else {
+
+                if (document.getElementById("autocomplete-list").childNodes.length > 0) {
+                    closeList()
+                }
+
+                let listContainer = document.getElementById("autocomplete-list")
+                let autocompleteList = newTrie.namesWithPrefix(prefix)
+
+                listContainer.innerHTML = ""
+
+                for (let i = 0; i < autocompleteList.length; i++) {
+                    listContainer.innerHTML += `<div onclick='handleClick(this)' class="autocomplete-item">${autocompleteList[i]}</div>`
+                }
+
+            }
+            // console.log(newTrie)
+            // console.log(newTrie.namesWithPrefix(prefix))
             return newTrie.namesWithPrefix(prefix)
 
         }
-    </script> -->
+    </script>
 </body>
+
 </html>

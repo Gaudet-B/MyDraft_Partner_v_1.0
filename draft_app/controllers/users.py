@@ -51,7 +51,8 @@ def recommendations():
 # guest
 @app.route("/guest/recommendations")
 def guest():
-    return render_template("guest.html")
+    player_names = general.get_player_names()
+    return render_template("guest.html", player_names = json.dumps(player_names))
 
 # advanced
 @app.route("/users/recommendations/advanced")
