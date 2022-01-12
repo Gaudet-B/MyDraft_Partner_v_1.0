@@ -53,6 +53,17 @@ class trieNode:
         self.traversal(s)
         return 'END'
 
+# function that gets all player names and returns an alphabetized list
+def get_player_names():
+    query = "SELECT name FROM players"
+    results = connectToMySQL(DATABASE).query_db(query)
+    names_list = []
+    for i in range(len(results)):
+        names_list.append(results[i]['name'])
+    # json_names = json.dumps(names_list)
+    # print(json_names)
+    # return json_names
+    return names_list
 
 # function that returns a list the overall picks to be drafted
 def draft_order(teams, spot, rounds):

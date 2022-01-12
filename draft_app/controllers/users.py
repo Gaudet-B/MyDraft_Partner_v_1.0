@@ -4,7 +4,9 @@ from werkzeug.utils import redirect
 from draft_app import app
 from draft_app.models.user import User
 from draft_app.models.player import Player
+from draft_app.controllers import general
 from flask_bcrypt import Bcrypt
+import json
 import re
 
 bcrypt = Bcrypt(app)
@@ -54,11 +56,13 @@ def guest():
 # advanced
 @app.route("/users/recommendations/advanced")
 def users_advanced():
-    return render_template("advanced.html")
+    player_names = general.get_player_names()
+    return render_template("advanced.html", player_names = json.dumps(player_names))
 
 @app.route("/guest/recommendations/advanced")
 def guest_advanced():
-    return render_template("advanced.html")
+    player_names = general.get_player_names()
+    return render_template("advanced.html", player_names = json.dumps(player_names))
 
 # settings
 @app.route("/users/account")
