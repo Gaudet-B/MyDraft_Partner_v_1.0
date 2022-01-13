@@ -27,23 +27,20 @@
             <div class="d-flex flex-column my-5">
                 <h5 class="fw-bold text-decoration-underline fs-5">Get Player Recommendations:</h5><br>
                 <form id="form" action="/players/results" method="post" class="form" style="max-width: 60%;">
+                    <label for="league_name" id="league_name_label" class="form-label mt-3">League Name:</label>
+                    <input type="text" name="league_name" id="league_name_input" placeholder="(optional)" class="form-control" oninput="leagueName(this)">
                     <label for="team_name" id="team_name_label" class="form-label mt-3">Team Name:</label>
-                    <input type="text" name="team_name" id="team_name_input" placeholder="(optional)"
-                        class="form-control">
-                    <label for="num_of_teams" id="num_of_teams_label" class="form-label mt-3">How many teams are in your
-                        league?</label>
-                    <select onclick="displaySpots()" name="num_of_teams" id="num_of_teams_select" class="form-select"
-                        style="max-width: 75px;">
+                    <input type="text" name="team_name" id="team_name_input" class="form-control" oninput="teamName(this)">
+                    <label for="num_of_teams" id="num_of_teams_label" class="form-label mt-3">How many teams are in your league?</label>
+                    <select onclick="displaySpots()" name="num_of_teams" id="num_of_teams_select" class="form-select" style="max-width: 75px;" onchange="numOfTeams(this)">
                         <option value="8">8</option>
                         <option value="10">10</option>
                         <option value="12">12</option>
                         <option value="14">14</option>
                         <option value="16">16</option>
                     </select>
-                    <label for="draft_position" id="draft_position_label" class="form-label mt-3">Which position are you
-                        drafting from?</label>
-                    <select name="draft_position" id="draft_position_select" class="form-select"
-                        style="max-width: 75px;">
+                    <label for="draft_position" id="draft_position_label" class="form-label mt-3">Which position are you drafting from?</label>
+                    <select name="draft_position" id="draft_position_select" class="form-select" style="max-width: 75px;" onchange="draftPosition(this)">
                         <option>-</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -56,7 +53,7 @@
                     </select>
                     <label for="draft_rounds" id="draft_rounds_label" class="form-label mt-3">How many total roster
                         spots per team (starters + bench) ?</label>
-                    <select name="draft_rounds" id="draft_rounds_select" class="form-select" style="max-width: 75px;">
+                    <select name="draft_rounds" id="draft_rounds_select" class="form-select" style="max-width: 75px;" onchange="draftRounds(this)">
                         <option value="12">12</option>
                         <option value="13">13</option>
                         <option value="14">14</option>
@@ -95,33 +92,61 @@
                 <div id="advanced_container"
                     class="d-flex flex-column border border-primary rounded mx-5 justify-content-start text-start"
                     style="min-height: 7px;">
-                    {% block advanced %}
-                    {% endblock %}
+                    <!-- {*
+                        {% block advanced %}
+                        {% endblock %}
+
+                    *} -->
                 </div>
-                </form>
             </div>
+        </form>
         </div>
     </div>
     <script src="/static/scripts/dynamic.js"></script>
     <script src="/static/scripts/draft_position.js"></script>
-    
+
     <script type="text/javascript">
 
         var names = {{ player_names| safe }}
 
-        const addActive = (elem, current) => {
-
-            removeActive(elem)
-
-            if (current >= elem.childNodes.length) current = 0
-            if (current < 0) current = elem.childNodes.length - 1
-
-            elem.childNodes[current].classList.add("autocomplete-active")
+        const leagueName = e => {
+            let hidden = document.getElementById("league_name_input")
+            if (hidden) document.getElementById("hidden_league_name").value = hidden.value
         }
 
-        const removeActive = elem => {
-            for (let i = 0; i < elem.childNodes.length; i++) {
-                elem.childNodes[i].classList.remove("autocomplete-active")
+        const teamName = e => {
+            let hidden = document.getElementById("team_name_input")
+            if (hidden) document.getElementById("hidden_team_name").value = hidden.value
+        }
+        
+        const numOfTeams = e => {
+            let hidden = document.getElementById("num_of_teams_select")
+            if (hidden) document.getElementById("hidden_num_of_teams").value = hidden.value
+        }
+        
+        const draftPosition = e => {
+            let hidden = document.getElementById("draft_position_select")
+            if (hidden) document.getElementById("hidden_draft_position").value = hidden.value
+        }
+        
+        const draftRounds = e => {
+            let hidden = document.getElementById("draft_rounds_select")
+            if (hidden) document.getElementById("hidden_draft_rounds").value = hidden.value
+        }
+
+        const addActive = (e, current) => {
+
+            removeActive(e)
+
+            if (current >= e.childNodes.length) current = 0
+            if (current < 0) current = e.childNodes.length - 1
+
+            e.childNodes[current].classList.add("autocomplete-active")
+        }
+
+        const removeActive = e => {
+            for (let i = 0; i < e.childNodes.length; i++) {
+                e.childNodes[i].classList.remove("autocomplete-active")
             }
         }
 
@@ -158,10 +183,10 @@
             delList.innerHTML = ""
         }
 
-        const autofill = (element, namesArr = names) => {
+        const autofill = (e, namesArr = names) => {
 
             // console.log(namesArr)
-            let prefix = element.value
+            let prefix = e.value
             // console.log(prefix)
 
             class TrieNode {

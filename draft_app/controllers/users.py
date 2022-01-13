@@ -4,6 +4,8 @@ from werkzeug.utils import redirect
 from draft_app import app
 from draft_app.models.user import User
 from draft_app.models.player import Player
+from draft_app.models.team import Team
+from draft_app.models.recommendation import Recommendation
 from draft_app.controllers import general
 from flask_bcrypt import Bcrypt
 import json
@@ -35,7 +37,10 @@ def dashboard():
         "id": session['user_id']
     }
     user = User.get_user_by_id(data)
-    return render_template("dashboard.html", user = user)
+    teams = Team.get_by_user(data)
+    # data.update({})
+    # recs = Recommendation.get
+    return render_template("dashboard.html", user = user, teams = teams)
 
 # recommendations
 @app.route("/users/recommendations")
@@ -46,7 +51,8 @@ def recommendations():
         "id": session['user_id']
     }
     user = User.get_user_by_id(data)
-    return render_template("loggedin.html", user = user)
+    player_names = general.get_player_names()
+    return render_template("loggedin.html", user = user, player_names = json.dumps(player_names))
 
 # guest
 @app.route("/guest/recommendations")
@@ -55,15 +61,15 @@ def guest():
     return render_template("guest.html", player_names = json.dumps(player_names))
 
 # advanced
-@app.route("/users/recommendations/advanced")
-def users_advanced():
-    player_names = general.get_player_names()
-    return render_template("advanced.html", player_names = json.dumps(player_names))
+# @app.route("/users/recommendations/advanced")
+# def users_advanced():
+#     player_names = general.get_player_names()
+#     return render_template("advanced.html", player_names = json.dumps(player_names))
 
-@app.route("/guest/recommendations/advanced")
-def guest_advanced():
-    player_names = general.get_player_names()
-    return render_template("advanced.html", player_names = json.dumps(player_names))
+# @app.route("/guest/recommendations/advanced")
+# def guest_advanced():
+#     player_names = general.get_player_names()
+#     return render_template("advanced.html", player_names = json.dumps(player_names))
 
 # settings
 @app.route("/users/account")

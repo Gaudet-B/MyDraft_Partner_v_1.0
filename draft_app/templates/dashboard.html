@@ -24,54 +24,44 @@
                 </div>
             </div>
             <div class="border border-primary rounded bg-primary mt-4 mb-3" style="width: 99%; margin: auto;"></div>
-            <div class="d-flex flex-column my-5">
-                <h5 class="fw-bold text-decoration-underline fs-5">Get Player Recommendations:</h5><br>
-                <form action="/players/results" method="post" class="form" style="max-width: 60%;">
-                    <label for="team_name" id="team_name_label" class="form-label mt-3">Team Name:</label>
-                    <input type="text" name="team_name" id="team_name_input" placeholder="(optional)" class="form-control">
-                    <label for="num_of_teams" id="num_of_teams_label" class="form-label mt-3">How many teams are in your league?</label>
-                    <select onclick="displaySpots()" name="num_of_teams" id="num_of_teams_select" class="form-select" style="max-width: 75px;">
-                        <option value="8">8</option>
-                        <option value="10">10</option>
-                        <option value="12">12</option>
-                        <option value="14">14</option>
-                        <option value="16">16</option>
-                    </select>
-                    <label for="draft_position" id="draft_position_label" class="form-label mt-3">Which position are you drafting from?</label>
-                    <select name="draft_position" id="draft_position_select" class="form-select" style="max-width: 75px;">
-                        <option>-</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                    </select>
-                    <label for="draft_rounds" id="draft_rounds_label" class="form-label mt-3">How many total roster spots per team (starters + bench) ?</label>
-                    <select name="draft_rounds" id="draft_rounds_select" class="form-select" style="max-width: 75px;">
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                    </select>
-                    <button type="submit" name="submit_btn" id="submit_btn" class="btn btn-primary my-4 fw-bold">GO</button>
-                
-            </div>
-            <div class="d-flex flex-column text-center justify-content-center">
-                <a class="link-light text-decoration-none fs-5"  onclick="displayAdvanced()" onmouseover="mousePointer(this)">
-                    <p>Advanced Options</p>
-                    <img class="mx-auto d-block" src="/static/assets/down-arrow-icon-vector.png" alt="down arrow icon" style="max-height: 30px; max-width: 80px;">
-                </a>
-                <div id="advanced_container" class="d-flex flex-column border border-primary rounded mx-5 justify-content-start text-start" style="min-height: 7px;">
+            <div class="d-flex flex-row my-5 justify-content-evenly" style="width: inherit;">
+                <div class="d-flex flex-column mx-3 p-2 border border-primary rounded" style="width: 50%;">
+                    <h5 class="fw-bold text-decoration-underline fs-5">My Teams:</h5>
+                    <div class="d-flex flex-column bg-light" style="width: 90%; margin: auto;">
+                    {% if teams %}
+                    {% for i in range(len(teams)) %}
+                        {% if i == 0 %}
+                        <div class="p-2 m-3">
+                            <a class="link link-primary m-3" href="#">{{ teams[i].name }}</a>
+                        </div>
+                        {% else %}
+                        <div class="p-2 m-3 border-top border-info">
+                            <a class="link link-primary m-3" href="#">{{ teams[i].name }}</a>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                    {% else %}
+                        <div class="text-center p-2 m-3">
+                            <p class="text-secondary mb-0">no teams saved</p>
+                            <a class="link link-secondary mb-3" href="/users/recommendations">click here to begin</a>
+                        </div>
+                    {% endif %}
+                    </div>
                 </div>
-            </form>
+                <div class="d-flex flex-column mx-3 p-2 border border-primary rounded" style="width: 50%;">
+                    <h5 class="fw-bold text-decoration-underline fs-5 mb-3">My Info:</h5>
+                    <div class="d-flex flex-row justify-content-between" style="width: fit-content;">
+                        <p class="fs-6 fw-bold mx-2 text-decoration-underline">username:</p>
+                        <p class="fs-6 mx-2">{{ user.user_name }}</p>
+                    </div>
+                    <div class="d-flex flex-row justify-content-between" style="width: fit-content;">
+                        <p class="fs-6 fw-bold mx-2 text-decoration-underline">email:</p>
+                        <p class="fs-6 mx-2">{{ user.email }}</p>
+                    </div>
+                    <div class="d-flex flex-row justify-content-around mt-2 mb-1">
+                        <a href="#" id="edit-link" class="link link-primary">edit account info</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

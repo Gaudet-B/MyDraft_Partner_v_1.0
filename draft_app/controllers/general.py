@@ -169,6 +169,8 @@ options = {
         "dst": 0,
         "k": 0
     }
+    
+    print(options)
 
     # for each pick, a query will be made to the database, a range will be created/sorted, and one recommendation will be given
     for i in range(len(picks)):

@@ -1,5 +1,5 @@
-from types import ClassMethodDescriptorType
-from werkzeug.utils import redirect
+# from types import ClassMethodDescriptorType
+# from werkzeug.utils import redirect
 from draft_app import app
 from draft_app.config.mysqlconnection import connectToMySQL
 from flask import flash, session

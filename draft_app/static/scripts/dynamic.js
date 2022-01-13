@@ -4,6 +4,12 @@ function displayAdvanced(){
     const htmlObject = {
     
         advancedOptions: `<p class="fw-bold fs-5 text-decoration-underline">Starting Roster:</p>
+        <form id="form" action="/players/results" method="post" class="form" >
+        <input type="hidden" name="league_name" id="hidden_league_name" value="">
+        <input type="hidden" name="team_name" id="hidden_team_name" value="">
+        <input type="hidden" name="num_of_teams" id="hidden_num_of_teams" value="">
+        <input type="hidden" name="draft_position" id="hidden_draft_position" value="">
+        <input type="hidden" name="draft_rounds" id="hidden_draft_rounds" value="">
         <div class="d-flex flex-row py-2">
             <label for= "qb_select" class="form-label">QB</label>
             <select name="qb_select" class="form-select mx-3" style="max-width: 75px;">
@@ -69,6 +75,7 @@ function displayAdvanced(){
         <div class="d-flex flex-row pt-3">
             <label for= "rd1_priority" class="form-label">Round One Priority:</label>
             <select name="rd1_priority" class="form-select mx-3" style="max-width: 75px;">
+                <option value="-">no preference</option>
                 <option value="QB">QB</option>
                 <option value="RB">RB</option>
                 <option value="WR">WR</option>
@@ -78,6 +85,7 @@ function displayAdvanced(){
         <div class="d-flex flex-row pt-3">
             <label for= "rd2_priority" class="form-label">Round Two Priority:</label>
             <select name="rd2_priority" class="form-select mx-3" style="max-width: 75px;">
+                <option value="-">no preference</option>
                 <option value="QB">QB</option>
                 <option value="RB">RB</option>
                 <option value="WR">WR</option>
@@ -87,6 +95,7 @@ function displayAdvanced(){
         <div class="d-flex flex-row pt-3">
             <label for= "rd3_priority" class="form-label">Round Three Priority:</label>
             <select name="rd3_priority" class="form-select mx-3" style="max-width: 75px;">
+                <option value="-">no preference</option>
                 <option value="QB">QB</option>
                 <option value="RB">RB</option>
                 <option value="WR">WR</option>
@@ -96,6 +105,7 @@ function displayAdvanced(){
         <div class="d-flex flex-row pt-3">
             <label for= "rd4_priority" class="form-label">Round Four Priority:</label>
             <select name="rd4_priority" class="form-select mx-3" style="max-width: 75px;">
+                <option value="-">no preference</option>
                 <option value="QB">QB</option>
                 <option value="RB">RB</option>
                 <option value="WR">WR</option>
@@ -105,6 +115,7 @@ function displayAdvanced(){
         <div class="d-flex flex-row pt-3">
             <label for= "rd5_priority" class="form-label">Round Five Priority:</label>
             <select name="rd5_priority" class="form-select mx-3" style="max-width: 75px;">
+                <option value="-">no preference</option>
                 <option value="QB">QB</option>
                 <option value="RB">RB</option>
                 <option value="WR">WR</option>
@@ -114,6 +125,7 @@ function displayAdvanced(){
         <div class="d-flex flex-row pt-3">
             <label for= "rd6_priority" class="form-label">Round Six Priority:</label>
             <select name="rd6_priority" class="form-select mx-3" style="max-width: 75px;">
+                <option value="-">no preference</option>
                 <option value="QB">QB</option>
                 <option value="RB">RB</option>
                 <option value="WR">WR</option>
@@ -126,7 +138,8 @@ function displayAdvanced(){
             <!-- <input name="target_player" id="target_player_input" type="text" class="form-control" onfocus='autocomplete(this)'> -->
             <input name="target_player" id="target_player_input" type="text" placeholder="(optional)" class="form-control" oninput='autofill(this)'>
         </div>
-        <button type="submit" name="submit_btn" id="submit_btn" class="btn btn-primary my-4 fw-bold pt-2" style="max-width: 50px; min-height: 50px;">GO</button>`,
+        <button type="submit" name="submit_btn" id="submit_btn" class="btn btn-primary my-4 fw-bold pt-2" style="max-width: 50px; min-height: 50px;">GO</button>
+        </form>`,
         
         advancedOptionsWithScript: `<p class="fw-bold fs-5 text-decoration-underline">Starting Roster:</p>
         <div class="d-flex flex-row py-2">
@@ -553,6 +566,10 @@ function displayAdvanced(){
 
         let button = document.getElementById("submit_btn")
         if (button) button.remove()
+        // setTimeout(() => {
+        //     document.getElementById("advanced-container").appendChild(button)
+        // }, 500);
+        container.appendChild(button)
         
         // let script = document.createElement("script")
         // script.id = "autocomplete-script"
@@ -565,6 +582,22 @@ function displayAdvanced(){
         container.innerHTML = html
 
         document.getElementById("arrow").src = "/static/assets/up-arrow-icon-vector.png"
+
+        let league = document.getElementById("league_name_input").value
+        document.getElementById("hidden_league_name").value = league
+
+        let team = document.getElementById("team_name_input").value
+        document.getElementById("hidden_team_name").value = team
+
+        let numTeams = document.getElementById("num_of_teams_select").value
+        document.getElementById("hidden_num_of_teams").value = numTeams
+
+        let position = document.getElementById("draft_position_select").value
+        document.getElementById("hidden_draft_position").value = position
+
+        let rounds = document.getElementById("draft_rounds_select").value
+        document.getElementById("hidden_draft_rounds").value = rounds
+
 
     }
 }

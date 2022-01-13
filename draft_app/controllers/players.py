@@ -4,7 +4,10 @@ from werkzeug.utils import redirect
 from draft_app import app
 from draft_app.models.user import User, Admin
 from draft_app.models.player import Player
+from draft_app.models.team import Team
+from draft_app.models.recommendation import Recommendation
 from draft_app.controllers import general
+import json
 
 
 # --> Display Routes <--
@@ -54,6 +57,7 @@ def display_advanced_results():
     # retrieve data from user input, run draft_order function to determine "user_picks"
     data = {
         "team_name": request.form['team_name'],
+        "league": request.form['league_name'],
         "num_of_teams": int(request.form['num_of_teams']),
         "draft_position": int(request.form['draft_position']),
         "num_of_rounds": int(request.form['draft_rounds']),
@@ -74,11 +78,8 @@ def display_advanced_results():
         "rd6_priority": request.form['rd6_priority'],
         "target_player": request.form['target_player']
     }
-    # check that user is logged in
-    if "user_id" in session:
-        data.update({"logged_in": True})
     # call pick_recs fuction to generate recommendations, then add them to the data that is passed to the html template
-    player_recs = general.pick_recs(data['user_picks'], data['num_of_teams'])
+    player_recs = general.pick_recs(data['user_picks'], data['num_of_teams'], options = data)
     data.update({"player_recs": player_recs})
     # declare variables needed to generate player targets
     sorted_players = []
@@ -87,6 +88,16 @@ def display_advanced_results():
     general.sort_by_value(unsorted_players, sorted_players)
     player_targets = sorted_players[:]
     data.update({"player_targets": player_targets})
+
+    # check that user is logged in
+    if "user_id" in session:
+        data.update({
+            "settings": json.dumps(data),
+            "logged_in": True,
+            "user_id": session['user_id']
+        })
+        team = Team.new(data)
+        data.update({"team": team})
 
     return render_template("results.html",  data = data)
 
