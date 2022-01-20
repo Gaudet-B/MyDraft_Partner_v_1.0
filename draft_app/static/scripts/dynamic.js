@@ -50,24 +50,33 @@ function displayAdvanced(){
             </select>
         </div>
         <div class="d-flex flex-row pt-3">
+            <p class="mx-2"><strong>PPR</strong> Scoring?</p>
+            <input name="ppr_scoring" type="radio" class="form-check-input mx-2" value="half"></input>
+            <label for="ppr_scoring" class="form-check-label mx-2">.05 ppr</label>
+            <input name="ppr_scoring" type="radio" class="form-check-input mx-2" value="full"></input>
+            <label for="ppr_scoring" class="form-check-label mx-2">1.0 ppr</label>
+            <input name="ppr_scoring" type="radio" class="form-check-input mx-2" value="False" checked></input>
+            <label for="ppr_scoring" class="form-check-label mx-2">No</label>
+        </div>
+        <div class="d-flex flex-row pt-3">
             <p class="mx-2">Play <strong>with</strong> a Superflex?</p>
-            <input name="super_flex" type="radio" class="form-check-input mx-2" value="true"></input>
+            <input name="super_flex" type="radio" class="form-check-input mx-2" value="True"></input>
             <label for="super_flex" class="form-check-label mx-2">Yes</label>
-            <input name="super_flex" type="radio" class="form-check-input mx-2" value="false" checked></input>
+            <input name="super_flex" type="radio" class="form-check-input mx-2" value="False" checked></input>
             <label for="super_flex" class="form-check-label mx-2">No</label>
         </div>
         <div class="d-flex flex-row pt-3">
             <p class="mx-2">Play <strong>without</strong> Team Defense? (D/ST)</p>
-            <input name="no_defenses" type="radio" class="form-check-input mx-2" value="true"></input>
+            <input name="no_defenses" type="radio" class="form-check-input mx-2" value="True"></input>
             <label for="no_defenses" class="form-check-label mx-2">Yes</label>
-            <input name="no_defenses" type="radio" class="form-check-input mx-2" value="false" checked></input>
+            <input name="no_defenses" type="radio" class="form-check-input mx-2" value="False" checked></input>
             <label for="no_defenses" class="form-check-label mx-2">No</label>
         </div>
         <div class="d-flex flex-row pt-3">
             <p class="mx-2">Play <strong>without</strong> Kickers?</p>
-            <input name="no_kickers" type="radio" class="form-check-input mx-2" value="true"></input>
+            <input name="no_kickers" type="radio" class="form-check-input mx-2" value="True"></input>
             <label for="no_kickers" class="form-check-label mx-2">Yes</label>
-            <input name="no_kickers" type="radio" class="form-check-input mx-2" value="false" checked></input>
+            <input name="no_kickers" type="radio" class="form-check-input mx-2" value="False" checked></input>
             <label for="no_kickers" class="form-check-label mx-2">No</label>
         </div>
         <p class="fw-bold fs-5 text-decoration-underline">Customize Recommendations:</p>
@@ -185,7 +194,7 @@ function displayAdvanced(){
             <p class="mx-2">Play <strong>with</strong> a Superflex?</p>
             <input name="super_flex" type="radio" class="form-check-input mx-2" value="true"></input>
             <label for="super_flex" class="form-check-label mx-2">Yes</label>
-            <input name="super_flex" type="radio" class="form-check-input mx-2" value="false" checked></input>
+            <input name="super_flex" type="radio" class="form-check-input mx-2" value="False" checked></input>
             <label for="super_flex" class="form-check-label mx-2">No</label>
         </div>
         <div class="d-flex flex-row pt-3">

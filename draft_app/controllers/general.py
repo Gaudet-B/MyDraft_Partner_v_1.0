@@ -147,16 +147,49 @@ def sort_by_ecr(unsorted_players, sorted_players):
         sort_by_ecr(unsorted_players, sorted_players)
 
 
+# function that sets options for pick_recs()
+def set_options(settings):
+    options = {
+        "positions": {
+        "qb": { "min": 1, "max": 2 }, 
+        "rb": { "min": 5, "max": 6 },
+        "wr": { "min": 5, "max": 6 },
+        "te": { "min": 1, "max": 2 },
+        "dst": { "min": 1, "max": 1 },
+        "k": { "min": 1, "max": 1 }
+        },
+        "priorities": {
+            0: False,
+            1: "rb",
+            2: "wr",
+            3: "te",
+            4: "qb"
+        }
+    }
+
+    
+
+    return options
+
 # function to determine the recommended players, round-by-round, based on user-provided options or the default options
 def pick_recs(picks, teams, 
 # default options if none are specified
-options = { 
-    "qb": { "min": 1, "max": 2 }, 
-    "rb": { "min": 5, "max": 6 },
-    "wr": { "min": 5, "max": 6 },
-    "te": { "min": 1, "max": 2 },
-    "dst": { "min": 1, "max": 1 },
-    "k": { "min": 1, "max": 1 }
+settings = { 
+    "positions": {
+        "qb": { "min": 1, "max": 2 }, 
+        "rb": { "min": 5, "max": 6 },
+        "wr": { "min": 5, "max": 6 },
+        "te": { "min": 1, "max": 2 },
+        "dst": { "min": 1, "max": 1 },
+        "k": { "min": 1, "max": 1 }
+    },
+    "priorities": {
+        0: False,
+        1: "rb",
+        2: "wr",
+        3: "te",
+        4: "qb"
+    }
     }):
 
     # set global variables for function
@@ -169,7 +202,14 @@ options = {
         "dst": 0,
         "k": 0
     }
-    
+
+    if "qb_select" in settings.keys():
+        options = set_options(settings)
+    else:
+        options = settings
+        
+
+    print(settings)
     print(options)
 
     # for each pick, a query will be made to the database, a range will be created/sorted, and one recommendation will be given
@@ -190,7 +230,7 @@ options = {
             elif result in recs:
                 pass
             # check to see if a position has already reached it's max value (from user-provided "options"), if so skip
-            elif selected[result['position'].lower()] == options[result['position'].lower()]['max']:
+            elif selected[result['position'].lower()] == options['positions'][result['position'].lower()]['max']:
                 pass
             else:
                 # add player to the range

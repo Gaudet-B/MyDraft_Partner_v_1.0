@@ -7,3 +7,10 @@ from draft_app.models.player import Player
 from draft_app.models.team import Team
 from draft_app.models.recommendation import Recommendation
 from draft_app.controllers import general
+
+
+# --> Display Routes <--
+
+
+
+# --> Action Routes <--
