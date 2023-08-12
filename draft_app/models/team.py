@@ -22,7 +22,12 @@ class Team:
 
     @classmethod
     def new(cls, data):
-        query = "INSERT INTO teams (name, league, settings, created_at, updated_at, user_id) VALUES (%(name)s, %(league)s, %(settings)s,  NOW(), NOW(), %(user_id)s, "
+        query = "INSERT INTO teams (name, league, settings, created_at, updated_at, user_id) VALUES (%(name)s, %(league)s, %(settings)s,  NOW(), NOW(), %(user_id)s);"
+        return connectToMySQL(DATABASE).query_db(query, data)
+
+    @classmethod
+    def update(cls, data):
+        query = "UPDATE teams SET name = %(name)s, league = %(league)s, settings = %(settings)s, updated_at = NOW() WHERE team_id = %(team_id)s;"
         return connectToMySQL(DATABASE).query_db(query, data)
     
     @classmethod
@@ -32,7 +37,7 @@ class Team:
     
     @classmethod
     def get_by_user(cls, data):
-        query = "SELECT * FROM teams WHERE user_id = %(id)s;"
+        query = "SELECT * FROM teams WHERE user_id = %(user_id)s;"
         return connectToMySQL(DATABASE).query_db(query, data)
     
     @classmethod

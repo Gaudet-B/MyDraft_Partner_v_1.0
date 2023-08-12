@@ -15,20 +15,20 @@ class Player:
         self.ecr_rank = data['ecr_rank']
         self.positional_rank = data['positional_rank']
         self.current_adp = data['current_adp']
-        self.difference = data['difference']
+        self.f_pros_id = data['f_pros_id']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
 
     # create new Player
     @classmethod
     def new(cls, data):
-        query = "INSERT INTO players (name, team, position, ecr_rank, positional_rank, current_adp, difference, created_at, updated_at) VALUES (%(name)s, %(team)s, %(position)s, %(ecr_rank)s, %(positional_rank)s, %(current_adp)s, %(difference)s, NOW(), NOW());"
+        query = "INSERT INTO players (name, team, position, ecr_rank, positional_rank, current_adp, f_pros_id, created_at, updated_at) VALUES (%(name)s, %(team)s, %(position)s, %(ecr_rank)s, %(positional_rank)s, %(current_adp)s, %(f_pros_id)s, NOW(), NOW());"
         return connectToMySQL(DATABASE).query_db(query, data)
 
     # update existing Player
     @classmethod
     def update(cls, data):
-        query = "UPDATE players SET team = %(team)s, ecr_rank = %(ecr_rank)s, positional_rank = %(positional_rank)s, current_adp = %(current_adp)s, difference = %(difference)s, updated_at = NOW() WHERE id = %(id)s;"
+        query = "UPDATE players SET team = %(team)s, ecr_rank = %(ecr_rank)s, positional_rank = %(positional_rank)s, current_adp = %(current_adp)s, updated_at = NOW() WHERE f_pros_id = %(f_pros_id)s;"
         return connectToMySQL(DATABASE).query_db(query, data)
 
     # retreive all Players from database
@@ -54,7 +54,7 @@ class Player:
     # retreive all players from data base and return a list sorted by ecr_rank
     @classmethod
     def get_all_sort_by_ecr(cls):
-        players = [];
+        players = []
         query = "SELECT * FROM players ORDER BY players.ecr_rank ASC;"
         results = connectToMySQL(DATABASE).query_db(query)
         for player in results:
