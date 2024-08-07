@@ -4,7 +4,8 @@ from flask import flash, session
 from flask_bcrypt import Bcrypt
 import re
 
-DATABASE = "fantasy_schema"
+# DATABASE = "fantasy_schema"
+DATABASE = "mdp_v3_schema"
 
 bcrypt = Bcrypt(app)
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')

@@ -1,6 +1,6 @@
-from flask import app
-from flask import url_for, render_template, request, redirect, session, flash, make_response
 import flask
+from flask import app
+from flask import request, make_response
 
 from draft_app import app
 from draft_app.models.user import User, Admin
@@ -10,14 +10,8 @@ from draft_app.models.ranking import Ranking
 from draft_app.models.roster import Roster
 from draft_app.models.recommendation import Recommendation
 from draft_app.controllers import general
-from bs4 import BeautifulSoup
-import requests
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-import re
-import time
+from draft_app.util.scraper_util import scrape_and_parse_player_data
 import json
-import os
 
 
 # --> API Routes <--
@@ -70,108 +64,24 @@ def api_display_all_player_names():
 def api_create_player_list():
   # print(os.getcwd() + '/chromedriver')
   print('running...')
-
-  # > SELENIUM SETUP <
-
-  # use Chrome driver options
-  options = webdriver.ChromeOptions()
-  # custom options
-  options.add_argument("--ignore-certificate-errors")
-  options.add_argument("--incognito")
-  options.add_argument("--headless")
-  path = os.getcwd() + '/draft_app/static/chromedriver.exe'
-  # path = url_for("static", filename="chromedriver.exe")
-  print(path)
-  driver = webdriver.Chrome(path, chrome_options=options)
-
-  # > SELENIUM SCRAPE <
-
-  url = "https://www.fantasypros.com/nfl/rankings/consensus-cheatsheets.php"
-  driver.get(url)
-  # allow Selenium time to scroll page
-  time.sleep(5)
-  # scrolls down the page to trigger loading of the entire list
-  driver.execute_script("window.scrollTo(0, 500)")
-  # allow Selenium to finish scraping
-  time.sleep(3)
-  # creates a representation of the html elements on the page
-  html = driver.page_source
-
-  # > BEAUTIFUL SOUP EXTRACTION <
-
-  # creates a Beautiful Soup document
-  soup = BeautifulSoup(html)
-  # player table
-  table = soup.find("table", attrs={"id":"ranking-table"})
-  # body of table
-  body = table.find("tbody")
-  # all rows containing player data
-  rows = body.find_all("tr", attrs={"class":"player-row"})
-  # empty array that will store player's unique id
-  player_ids = []
-  # empty array that will store players
-  players = []
-  # iterate through table rows 
-  for row in rows:
-    columns = row.find_all("td")
-    for column in columns:
-      player_id = column.find_all("div")
-      for id in player_id:
-        print(id)
-        if id.has_attr('data-player'):
-          player_ids.append(id['data-player'])
-    # beautiful soup built-in to strip excess text
-    columns = [element.text.strip() for element in columns]
-    # add data to the "players" list
-    players.append([element for element in columns if element])
-  
-  # iterate through "players" list
-  for player in players:
-      # handle edge case where there are periodic breaks in the usable data
-      if player[0][0] != "T":
-          # pull each player name from the data
-          player_name = general.split_string(player[1])
-          # conditionals that handle different lengths and formats of player positions
-          if player[3][0] == "D":
-              player_position = player[3][0:3]
-          elif player[3][0] == "K":
-              player_position = player[3][0]
-          else:
-              player_position = player[3][0:2]
-          # edge cases where negative integers are parsed differently 
-          if player[5] == "-":
-              edge_case_data = {
-                  "name": player_name[0] + " " + player_name[1],
-                  "team": player_name[2],
-                  "position": player_position,
-                  "ecr_rank": float(player[0]),
-                  "positional_rank": player[2],
-                  "current_adp": float(player[0]),
-                  "f_pros_id": player_ids.pop(0)
-              }
-              # create a new instance of the Player class
-              Player.new(edge_case_data)
-          # cases with positive integers - handle normally
-          else:
-            print(player_name)
-            player_data = {
-                "name": player_name[0] + " " + player_name[1],
-                "team": player_name[2],
-                "position": player_position,
-                "ecr_rank": float(player[0]),
-                "positional_rank": player[2],
-                "current_adp": float(player[0]) + float(player[5]),
-                "f_pros_id": player_ids.pop(0),
-            }
-            # create a new instance of the Player class
-            Player.new(player_data)
-
-  # return redirect("/dev_controls")
-  res = make_response('players created')
+  player_list = scrape_and_parse_player_data()
+  for player in player_list:
+    # create a new instance of the Player class and add to DB
+    Player.new(player)
+  res = flask.Response(json.dumps('players created'))
   res.headers['Access-Control-Allow-Origin'] = '*'
   return res
 
-# @app.route('/api/update_player_list', methods=['PUT'])
+@app.route('/api/update_player_list', methods=['PUT'])
+def api_update_player_list():
+  print('running...')
+  player_list = scrape_and_parse_player_data()
+  for player in player_list:
+    Player.edit(player)
+  res = flask.Response(json.dumps('players updated'))
+  res.headers['Access-Control-Allow-Origin'] = '*'
+  return res
+
 
 @app.route('/api/create_team', methods=['POST'])
 def api_create_team():
@@ -191,16 +101,6 @@ def api_create_team():
     "roster": data['roster'],
   }
 
-  #
-  # team_settings['draft_position'] = json.dumps(team_settings['draftPosition'])
-  # team_settings['superflex'] = json.dumps(team_settings['superflex'])
-  # team_settings['ppr'] = json.dumps(team_settings['ppr'])
-  # team_settings['num_of_teams'] = json.dumps(team_settings['numOfTeams'])
-  #
-  print(team_settings)
-  # team_roster = data['roster']
-  # team_settings['roster'] = team_roster
-  # settings_json = json.dumps(team_settings)
   team_data = {
     "name": team_info['name'],
     "league": team_info['league'],
@@ -240,16 +140,6 @@ def api_update_team():
     "roster": data['roster'],
   }
 
-  #
-  # team_settings['draft_position'] = json.dumps(team_settings['draftPosition'])
-  # team_settings['superflex'] = json.dumps(team_settings['superflex'])
-  # team_settings['ppr'] = json.dumps(team_settings['ppr'])
-  # team_settings['num_of_teams'] = json.dumps(team_settings['numOfTeams'])
-  #
-  print(team_settings)
-  # team_roster = data['roster']
-  # team_settings['roster'] = team_roster
-  # settings_json = json.dumps(team_settings)
   team_data = {
     "name": team_info['name'],
     "league": team_info['league'],
@@ -395,7 +285,7 @@ def api_save_ranks():
   print(data)
   # 
   ranking_data = {
-    "team_id": data['teamId'],
+    "id": data['id'],
     "players": json.dumps(data['players'])
   }
   #

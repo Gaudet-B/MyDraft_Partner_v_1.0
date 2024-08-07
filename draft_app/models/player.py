@@ -2,8 +2,10 @@ from werkzeug.utils import redirect
 from draft_app import app
 from draft_app.config.mysqlconnection import connectToMySQL
 from flask import flash, session
+import json
 
-DATABASE = "fantasy_schema"
+# DATABASE = "fantasy_schema"
+DATABASE = "mdp_v3_schema"
 
 
 class Player:
@@ -16,19 +18,49 @@ class Player:
         self.positional_rank = data['positional_rank']
         self.current_adp = data['current_adp']
         self.f_pros_id = data['f_pros_id']
+        self.consistency_t1 = data['consistency_t1']
+        self.consistency_t2 = data['consistency_t2']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
 
     # create new Player
     @classmethod
     def new(cls, data):
-        query = "INSERT INTO players (name, team, position, ecr_rank, positional_rank, current_adp, f_pros_id, created_at, updated_at) VALUES (%(name)s, %(team)s, %(position)s, %(ecr_rank)s, %(positional_rank)s, %(current_adp)s, %(f_pros_id)s, NOW(), NOW());"
+        query = "INSERT INTO players (name, team, position, ecr_rank, positional_rank, current_adp, f_pros_id, consistency_t1, consistency_t2, created_at, updated_at) VALUES (%(name)s, %(team)s, %(position)s, %(ecr_rank)s, %(positional_rank)s, %(current_adp)s, %(f_pros_id)s, %(consistency_t1)s, %(consistency_t2)s, NOW(), NOW());"
         return connectToMySQL(DATABASE).query_db(query, data)
 
-    # update existing Player
+    # update existing Player (DEPRICATED)
     @classmethod
     def update(cls, data):
         query = "UPDATE players SET team = %(team)s, ecr_rank = %(ecr_rank)s, positional_rank = %(positional_rank)s, current_adp = %(current_adp)s, updated_at = NOW() WHERE f_pros_id = %(f_pros_id)s;"
+        return connectToMySQL(DATABASE).query_db(query, data)
+    
+    # alternative update method
+    @classmethod
+    def edit(cls, data):
+        # consistency = data['consistency']
+        # if consistency is None:
+        #     data['consistency_t1'] = None
+        #     data['consistency_t2'] = None
+        # else:
+        #     data['consistency_t1'] = consistency.get('t1')
+        #     data['consistency_t2'] = consistency.get('t2')
+        # print(data)
+        query = """
+            UPDATE players
+            SET
+                name = CASE WHEN name <> %(name)s THEN %(name)s ELSE name END,
+                team = CASE WHEN team <> %(team)s THEN %(team)s ELSE team END,
+                position = CASE WHEN position <> %(position)s THEN %(position)s ELSE position END,
+                ecr_rank = CASE WHEN ecr_rank <> %(ecr_rank)s THEN %(ecr_rank)s ELSE ecr_rank END,
+                positional_rank = CASE WHEN positional_rank <> %(positional_rank)s THEN %(positional_rank)s ELSE positional_rank END,
+                current_adp = CASE WHEN current_adp <> %(current_adp)s THEN %(current_adp)s ELSE current_adp END,
+                consistency_t1 = CASE WHEN consistency_t1 <> %(consistency_t1)s THEN %(consistency_t1)s else consistency_t1 END,
+                consistency_t2 = CASE WHEN consistency_t2 <> %(consistency_t2)s THEN %(consistency_t2)s else consistency_t2 END,
+                updated_at = NOW()
+            WHERE f_pros_id = %(f_pros_id)s;
+        """
+        # query = "UPDATE players SET consistency = %(consistency)s WHERE f_pros_id = %(f_pros_id)s;"
         return connectToMySQL(DATABASE).query_db(query, data)
 
     # retreive all Players from database

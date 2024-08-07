@@ -1,7 +1,8 @@
 from draft_app import app
 from draft_app.config.mysqlconnection import connectToMySQL
 
-DATABASE = "fantasy_schema"
+# DATABASE = "fantasy_schema"
+DATABASE = "mdp_v3_schema"
 
 class Roster:
   def __init__(self, data):
