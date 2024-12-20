@@ -5,12 +5,14 @@ from flask import request, make_response
 from draft_app import app
 from draft_app.models.user import User, Admin
 from draft_app.models.player import Player
+from draft_app.models.projection import Projection
 from draft_app.models.team import Team
 from draft_app.models.ranking import Ranking
 from draft_app.models.roster import Roster
 from draft_app.models.recommendation import Recommendation
 from draft_app.controllers import general
-from draft_app.util.scraper_util import scrape_and_parse_player_data
+from draft_app.util.scraper_util import scrape_and_parse_player_data, scrape_and_parse_espn_projections
+from draft_app.util.csv_util import parse_projections_csv, update_player_projections
 import json
 
 
@@ -66,6 +68,7 @@ def api_create_player_list():
   print('running...')
   player_list = scrape_and_parse_player_data()
   for player in player_list:
+    # @TODO need an error handler here?
     # create a new instance of the Player class and add to DB
     Player.new(player)
   res = flask.Response(json.dumps('players created'))
@@ -79,6 +82,42 @@ def api_update_player_list():
   for player in player_list:
     Player.edit(player)
   res = flask.Response(json.dumps('players updated'))
+  res.headers['Access-Control-Allow-Origin'] = '*'
+  return res
+
+
+@app.route('/api/get_espn_projections', methods=['POST'])
+def api_get_espn_projections():
+  print('running...')
+  player_projections = scrape_and_parse_espn_projections()
+  if not player_projections:
+    raise Exception('Error scraping ESPN projections')
+  
+  Projection.new({'source': 'espn', 'projections': json.dumps(player_projections)})
+  # players = general.get_espn_projections(data)
+  res = flask.Response(json.dumps('player projections updated'))
+  res.headers['Access-Control-Allow-Origin'] = '*'
+  return res
+
+
+@app.route('/api/upload_ballers_player_projections', methods=['POST'])
+def api_upload_player_projections():
+  print('running... upload_ballers_player_projections')
+  data = request.get_json()
+  source = f'footballers-{data["source"]}'
+  existing_projections = Projection.get_by_source({'source': source})
+  print(f'EXISTING PROJECTIONS ===> {existing_projections}')
+  existing = json.loads(existing_projections[0]['projections']) if existing_projections else None
+  new = parse_projections_csv(data)
+  print(f'NEW PROJECTIONS ===> {new}')
+  player_projections = new if existing is None else update_player_projections(existing, new)
+  print(f'PLAYER PROJECTIONS ===> {player_projections}')
+  # if no projections exist for the source, create a new entry
+  if existing is None:
+    Projection.new({'source': source, 'projections': json.dumps(player_projections)})
+  else:
+    Projection.update({'source': source, 'projections': json.dumps(player_projections)})
+  res = flask.Response(json.dumps('player projections uploaded'))
   res.headers['Access-Control-Allow-Origin'] = '*'
   return res
 

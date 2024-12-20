@@ -6,6 +6,7 @@ from flask import flash, session
 from flask_bcrypt import Bcrypt
 import re
 
+# @TODO - why was the DB not changed here?
 DATABASE = "fantasy_schema"
 
 bcrypt = Bcrypt(app)
